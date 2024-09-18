@@ -74,6 +74,14 @@ sed -i -z -E \
   -e "s/PIPELINE_SECURITY_SLACK_CHANNEL/$PIPELINE_SECURITY_SLACK_CHANNEL/" \
   .circleci/config.yml
 
+# Change cron within the workflows
+RANDOM_HOUR=$((RANDOM % (9 - 3 + 1) + 3))
+RANDOM_MINUTE=$(($RANDOM%60))
+RANDOM_MINUTE2=$(($RANDOM%60))
+sed -i -E -e "s/- cron: \"30 5/- cron: \"$RANDOM_MINUTE2 $RANDOM_HOUR/" .github/workflows/security_veracode_policy_scan.yml
+sed -i -E -e "s/- cron: \"30 5/- cron: \"$RANDOM_MINUTE $RANDOM_HOUR/" .github/workflows/security*.yml      
+
+
 # lastly remove ourselves
 rm rename-project.bash
 

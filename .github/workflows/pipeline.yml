@@ -82,7 +82,7 @@ jobs:
       environment: ${{ inputs.environment || 'dev' }}
   build:
     name: Build docker image from hmpps-github-actions
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/HEAT-353-typescript-node-workflow-test'
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@v1 # WORKFLOW_VERSION
     needs: 
       - node_integration_tests

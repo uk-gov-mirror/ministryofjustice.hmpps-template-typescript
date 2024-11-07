@@ -23,16 +23,6 @@ permissions:
   contents: read
     
 jobs:
-  list_packages:
-    name: List Packages
-    uses: shaneapowell/ghaction-package-admin@v1
-    with:
-      operation: listPackageVersions
-      ghtoken: ${{ github.token }}
-      org: ${{ github.repository_owner }}
-      page_type: container
-      package_name: ${{ github.event.repository.name }}
-      summary: true
   helm_lint:
     name: helm lint
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/test_helm_lint.yml@v1 # WORKFLOW_VERSION

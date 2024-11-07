@@ -17,14 +17,14 @@ on:
           - prod
         default: 'dev'
       additional_docker_tag:
-        description: Additional docker tag that can be used to specify stable tags
+        description: Additional docker tag that can be used to specify stable or testing tags
         required: false
         default: ''
         type: string
       push:
         description: Push docker image to registry flag
         required: true
-        default: true
+        default: false
         type: boolean
 
 permissions:

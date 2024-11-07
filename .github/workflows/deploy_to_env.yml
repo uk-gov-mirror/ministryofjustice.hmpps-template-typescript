@@ -1,0 +1,50 @@
+name: Pipeline [test -> build -> deploy]
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment
+        type: choice
+        required: true
+        options:
+          - dev
+          - preprod
+          - staging
+          - prod
+        default: 'dev'
+      version:
+        description: version to be deployed to environment - must exist already.
+        required: true
+        default: ''
+        type: string
+
+permissions:
+  contents: read
+    
+jobs:
+  list_packages:
+    name: List Packages
+    uses: shaneapowell/ghaction-package-admin@v1
+    with:
+      operation: listPackageVersions
+      ghtoken: ${{ github.token }}
+      org: ${{ github.repository_owner }}
+      page_type: container
+      package_name: ${{ github.event.repository.name }}
+      summary: true
+  helm_lint:
+    name: helm lint
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/test_helm_lint.yml@v1 # WORKFLOW_VERSION
+    secrets: inherit
+    with:
+      environment: ${{ inputs.environment }}
+  deploy_env:
+    name: Deploy to environment 
+    needs:
+      - helm_lint
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v1 # WORKFLOW_VERSION
+    secrets: inherit
+    with:
+      environment: ${{ inputs.environment }}
+      app_version: ${{ inputs.version }}

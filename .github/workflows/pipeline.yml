@@ -6,16 +6,6 @@ on:
      - '**'
   workflow_dispatch:
     inputs:
-      environment:
-        description: Environment
-        type: choice
-        required: true
-        options:
-          - dev
-          - preprod
-          - staging
-          - prod
-        default: 'dev'
       additional_docker_tag:
         description: Additional docker tag that can be used to specify stable or testing tags
         required: false
@@ -50,11 +40,14 @@ jobs:
     needs: [node_build]
     secrets: inherit
   helm_lint:
+    strategy:
+      matrix:
+        environments: ['dev','preprod','prod']
     name: helm lint
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/test_helm_lint.yml@v1 # WORKFLOW_VERSION
     secrets: inherit
     with:
-      environment: ${{ inputs.environment || 'dev' }}
+      environment: ${{ matrix.environments }}
   build:
     name: Build docker image from hmpps-github-actions
     if: github.ref == 'refs/heads/HEAT-353-typescript-node-workflow-test'

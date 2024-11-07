@@ -10,11 +10,10 @@ on:
         options:
           - dev
           - preprod
-          - staging
           - prod
         default: 'dev'
       version:
-        description: version to be deployed to environment - must exist already.
+        description: version to be deployed to the environment - must already exist.
         required: true
         default: ''
         type: string
